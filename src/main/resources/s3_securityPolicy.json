@@ -1,0 +1,11 @@
+{
+  "expiration": "2020-01-01T00:00:00Z",
+  "conditions": [
+    {"bucket": "pbs-tasks-management"},
+    ["starts-with", "$key", ""],
+    {"acl": "private"},
+    ["starts-with", "$Content-Type", ""],
+    ["starts-with", "$filename", ""],
+    ["content-length-range", 0, 524288000]
+  ]
+}
