@@ -2,6 +2,7 @@ package com;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.system.ApplicationPidFileWriter;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.web.SpringBootServletInitializer;
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import java.io.File;
 
 @Configuration // needed to specify that the class contains global spring configurations
 @ComponentScan
@@ -149,6 +151,13 @@ public class Application extends SpringBootServletInitializer {
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        File pid = new File("app.pid");
+        pid.deleteOnExit();
+
+        SpringApplication app = new SpringApplication(Application.class);
+        app.setShowBanner(false);
+        app.addListeners(new ApplicationPidFileWriter(pid));
+
+        app.run(args);
     }
 }
